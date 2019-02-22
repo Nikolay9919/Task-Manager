@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Приложение</string>
+    <string name="low">нисък приоритет</string>
+    <string name="medium">среден приоритет</string>
+    <string name="high">висок приоритет</string>
+    <string name="task_title">Заглавие на задачата</string>
+    <string name="description">описание</string>
+    <string name="priority">приоритет</string>
+    <string name="task">задача</string>
+    <string name="delete">Удали</string>
+    <string name="no_tasks">Няма задачи</string>
+    <string name="empty">празни полета</string>
+</resources>

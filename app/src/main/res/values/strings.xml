@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="low">low priority</string>
+    <string name="medium">medium priority</string>
+    <string name="high">high priority</string>
+    <string name="task_title">Task title</string>
+    <string name="description">Description</string>
+    <string name="priority">Priority</string>
+    <string name="task">Task</string>
+    <string name="delete">Delete</string>
+    <string name="no_tasks">No Tasks</string>
+    <string name="empty">empty fields</string>
+</resources>
