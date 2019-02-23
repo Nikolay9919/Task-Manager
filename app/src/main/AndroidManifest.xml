@@ -9,11 +9,6 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar">
-        <service
-                android:name=".Service.NotificationService"
-                android:enabled="true"
-                android:exported="true">
-        </service>
 
         <activity android:name=".Activities.AddEditTaskActivity"/>
         <activity android:name=".Activities.MainActivity">
@@ -23,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <service android:name=".Service.NotificationIntentService"/>
     </application>
 
 </manifest>

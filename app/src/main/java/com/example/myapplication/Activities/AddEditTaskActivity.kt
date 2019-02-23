@@ -107,8 +107,6 @@ class AddEditTaskActivity : AppCompatActivity() {
                     selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                     val date = simpleDateFormat.format(selectedDate.time)
                     dateTask = date
-                    Snackbar.make(it, date, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
                 },
                 now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
             )
@@ -123,8 +121,6 @@ class AddEditTaskActivity : AppCompatActivity() {
                     selectedTime.set(Calendar.HOUR_OF_DAY, hour)
                     selectedTime.set(Calendar.MINUTE, minute)
                     val time = simpleTimeFormat.format(selectedTime.time)
-                    Snackbar.make(it, time, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
                     timeTask = time
                 },
                 now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true

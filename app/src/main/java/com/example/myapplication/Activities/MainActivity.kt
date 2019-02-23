@@ -9,6 +9,7 @@ import android.view.View
 import com.example.myapplication.Models.Task
 import com.example.myapplication.R
 import com.example.myapplication.SQLite.FeedReaderDbHelper
+import com.example.myapplication.Service.NotificationIntentService
 import com.example.myapplication.Service.NotificationService
 import com.example.myapplication.TaskAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         val intent = Intent(this, AddEditTaskActivity::class.java)
-        val intentService = Intent(this, NotificationService::class.java)
+        val intentService = Intent(this, NotificationIntentService::class.java)
         startService(intentService)
         updateList()
         isEmpty()
