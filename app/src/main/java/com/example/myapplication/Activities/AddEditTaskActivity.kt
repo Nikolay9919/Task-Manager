@@ -28,6 +28,8 @@ class AddEditTaskActivity : AppCompatActivity() {
     private var priorities = arrayOf("Low Priority", "Medium Priority", "High Priority")
     lateinit var priority: String
     var priorityGrade: Int = 0
+    private var dateTask: String = ""
+    private var timeTask: String = ""
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +41,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         val intent: Intent = intent
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
         Log.d("taskId", taskId.toString())
-        if (taskId != -1L) {
+        if (isEdit(taskId)) {
             val task: Task = dbHelper.getTask(taskId)
             editTextTitle.setText(task.title)
         }
@@ -50,7 +52,7 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
-        return if (taskId != -1L) {
+        return if (isEdit(taskId)) {
             menuInflater.inflate(R.menu.menu, menu)
             true
         } else false
@@ -59,7 +61,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
         val dbHelper = FeedReaderDbHelper(applicationContext)
-        if (item != null && taskId != -1L) {
+        if (item != null && isEdit(taskId)) {
             when (item.itemId) {
                 R.id.action_delete -> {
                     dbHelper.deleteTask(taskId)
@@ -91,7 +93,8 @@ class AddEditTaskActivity : AppCompatActivity() {
     private fun initButtons() {
         val dbHelper = FeedReaderDbHelper(applicationContext)
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        val simpleTimeFormat = SimpleDateFormat("HH:mm:SS", Locale.US)
 
         button_date.setOnClickListener {
             val now = Calendar.getInstance()
@@ -102,6 +105,9 @@ class AddEditTaskActivity : AppCompatActivity() {
                     selectedDate.set(Calendar.MONTH, month)
                     selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                     val date = simpleDateFormat.format(selectedDate.time)
+                    dateTask = date
+                    Snackbar.make(it, date, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
                 },
                 now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
             )
@@ -111,26 +117,39 @@ class AddEditTaskActivity : AppCompatActivity() {
         button_time.setOnClickListener {
             val now = Calendar.getInstance()
             val timePicker = TimePickerDialog(
-                this, TimePickerDialog.OnTimeSetListener { timePicker, hour, minute -> },
+                this, TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                    val selectedTime = Calendar.getInstance()
+                    selectedTime.set(Calendar.HOUR_OF_DAY, hour)
+                    selectedTime.set(Calendar.MINUTE, minute)
+                    val time = simpleTimeFormat.format(selectedTime.time)
+                    Snackbar.make(it, time, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                    timeTask = time
+                },
                 now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true
             )
+
             timePicker.show()
         }
 
 
         fab.setOnClickListener { view ->
+            val title = editTextTitle.text.toString()
             if (emptyValidation()) {
                 Snackbar.make(view, R.string.empty, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
             } else {
                 if (taskId == -1L) {
-                    val title = editTextTitle.text.toString()
-                    val task = Task(null, title, false, priority, priorityGrade)
+                    val task = Task(null, title, false, priority, priorityGrade, dateTask, timeTask)
                     Log.d("add", task.toString())
                     dbHelper.addTask(task)
                     goHome()
                 } else {
-                    val task: Task = dbHelper.getTask(taskId)
+                    when {
+                        dateTask.isEmpty() -> dateTask = dbHelper.getTask(taskId).date
+                        timeTask.isEmpty() -> timeTask = dbHelper.getTask(taskId).time
+                    }
+                    val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
                     dbHelper.updateTask(task)
                     goHome()
                 }
@@ -143,6 +162,10 @@ class AddEditTaskActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun emptyValidation(): Boolean = TextUtils.isEmpty(editTextTitle.text)
+    private fun emptyValidation(): Boolean = TextUtils.isEmpty("${editTextTitle.text}" + dateTask + timeTask)
+
+    private fun isEdit(taskId : Long) : Boolean {
+        return taskId != -1L
+    }
 
 }

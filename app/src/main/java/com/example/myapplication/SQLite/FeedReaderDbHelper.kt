@@ -14,7 +14,7 @@ class FeedReaderDbHelper(context: Context) :
     override fun onCreate(db: SQLiteDatabase?) {
 
         db?.execSQL(FeedReaderContract.SQL_CREATE_ENTRIES_TASK)
-        db?.execSQL(FeedReaderContract.SQL_INSERT_TASK)
+
 
     }
 
@@ -29,6 +29,7 @@ class FeedReaderDbHelper(context: Context) :
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_DONE, task.done)
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY, task.Priority)
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY_GRADE, task.PriorityGrade)
+            put(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME, "${task.date} ${task.time}")
         }
         val newRow = db.insert(FeedReaderContract.FeedEntry.TABLE_TASK, null, values)
     }
@@ -55,7 +56,15 @@ class FeedReaderDbHelper(context: Context) :
                     cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE)),
                     changeToBool(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_DONE))),
                     cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY)),
-                    cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY_GRADE))
+                    cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY_GRADE)),
+                    (cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME))).substring(
+                        0,
+                        10
+                    ),
+                    (cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME))).substring(
+                        10,
+                        19
+                    )
                 )
                 taskList.add(task)
             } while (cursor.moveToNext())
@@ -78,29 +87,42 @@ class FeedReaderDbHelper(context: Context) :
                 cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE)),
                 equals(cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_DONE))),
                 cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY)),
-                cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY_GRADE))
+                cursor.getInt(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY_GRADE)),
+                (cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME))).substring(
+                    0,
+                    10
+                ),
+                (cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME))).substring(
+                    10,
+                    17
+                )
+
             )
         }
 
+        Log.d("date time", task.toString())
         return task
     }
 
     fun updateTask(task: Task) {
         Log.d("updateTask", task.toString())
+
         val contentValues = ContentValues().apply {
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE, task.title)
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_DONE, task.done)
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_PRIORITY, task.Priority)
-
+            put(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME, "${task.date} ${task.time}")
         }
+
         val db = writableDatabase
         Log.d("cv", contentValues.toString())
         db.update(
             FeedReaderContract.FeedEntry.TABLE_TASK, contentValues,
             BaseColumns._ID + " = " + task.id, null
         )
-        Log.d("task", getTask(task.id!!).toString())
+
     }
+
 
     fun deleteTask(taskId: Long) {
         val selection = "${BaseColumns._ID} LIKE " + taskId
@@ -111,6 +133,7 @@ class FeedReaderDbHelper(context: Context) :
     private fun changeToBool(int: Int): Boolean {
         return int == 1
     }
+
 }
 
 

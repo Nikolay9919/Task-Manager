@@ -28,12 +28,23 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(task: Task, listener: (Task) -> Unit) = with(itemView) {
             tvTitle.text = task.title
+            tvTime.text = task.date + task.time
             tvPriority.text = task.Priority
             checkbox.isChecked = task.done
+
             setOnClickListener { listener(task) }
             checkbox.setOnClickListener {
                 val dbHelper = FeedReaderDbHelper(context)
-                val editedTask = Task(task.id, task.title, checkbox.isChecked, task.Priority, task.PriorityGrade)
+                val editedTask =
+                    Task(
+                        task.id,
+                        task.title,
+                        checkbox.isChecked,
+                        task.Priority,
+                        task.PriorityGrade,
+                        task.date,
+                        task.time
+                    )
                 dbHelper.updateTask(editedTask)
                 Log.d("adapterDone", editedTask.toString() + checkbox.isChecked)
             }

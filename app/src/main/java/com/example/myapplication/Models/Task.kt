@@ -1,7 +1,15 @@
 package com.example.myapplication.Models
 
-data class Task(var id: Long?, var title: String, var done: Boolean, var Priority: String, var PriorityGrade : Int) {
-    constructor() : this(-1,"",false,"",-1)
+data class Task(
+    var id: Long?,
+    var title: String,
+    var done: Boolean,
+    var Priority: String,
+    var PriorityGrade: Int,
+    var date: String,
+    var time: String
+) {
+    constructor() : this(-1, "", false, "", -1, "", "")
 
 
     override fun equals(other: Any?): Boolean {
@@ -27,7 +35,8 @@ data class Task(var id: Long?, var title: String, var done: Boolean, var Priorit
     }
 
     override fun toString(): String {
-        return "Task(id=$id, title='$title', done=$done, Priority='$Priority', PriorityGrade=$PriorityGrade)"
+        return "Task(id=$id, title='$title', done=$done, Priority='$Priority', PriorityGrade=$PriorityGrade, date='$date', time='$time')"
     }
+
 
 }
