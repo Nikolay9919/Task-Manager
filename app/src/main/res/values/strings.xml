@@ -9,5 +9,5 @@
     <string name="task">Task</string>
     <string name="delete">Delete</string>
     <string name="no_tasks">No Tasks</string>
-    <string name="empty">empty fields</string>
+    <string name="empty">empty fields (Check Date and Time)</string>
 </resources>

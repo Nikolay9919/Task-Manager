@@ -95,7 +95,8 @@ class AddEditTaskActivity : AppCompatActivity() {
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val simpleTimeFormat = SimpleDateFormat("HH:mm:SS", Locale.US)
-
+        if (timeTask.isEmpty()) timeTask = dbHelper.getTask(taskId).time
+        if (dateTask.isEmpty()) dateTask = dbHelper.getTask(taskId).date
         button_date.setOnClickListener {
             val now = Calendar.getInstance()
             val datePicker = DatePickerDialog(
@@ -135,36 +136,41 @@ class AddEditTaskActivity : AppCompatActivity() {
 
         fab.setOnClickListener { view ->
             val title = editTextTitle.text.toString()
-            if (emptyValidation()) {
-                Snackbar.make(view, R.string.empty, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            } else {
-                if (taskId == -1L) {
+
+            if (taskId == -1L) {
+                if (emptyValidation()) {
+                    Snackbar.make(view, R.string.empty, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                } else {
                     val task = Task(null, title, false, priority, priorityGrade, dateTask, timeTask)
+
+
+                    if (task.date.isEmpty()) task.date = "0000-00-00"
                     Log.d("add", task.toString())
                     dbHelper.addTask(task)
                     goHome()
-                } else {
-                    when {
-                        dateTask.isEmpty() -> dateTask = dbHelper.getTask(taskId).date
-                        timeTask.isEmpty() -> timeTask = dbHelper.getTask(taskId).time
-                    }
-                    val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
-                    dbHelper.updateTask(task)
-                    goHome()
                 }
+            } else {
+                val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
+                dbHelper.updateTask(task)
+                goHome()
             }
         }
     }
+
 
     private fun goHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
-    private fun emptyValidation(): Boolean = TextUtils.isEmpty("${editTextTitle.text}" + dateTask + timeTask)
+    private fun emptyValidation(): Boolean {
+        if (TextUtils.isEmpty("editTextTitle.text") || TextUtils.isEmpty(dateTask) || TextUtils.isEmpty(timeTask))
+            return true
+        return false
+    }
 
-    private fun isEdit(taskId : Long) : Boolean {
+    private fun isEdit(taskId: Long): Boolean {
         return taskId != -1L
     }
 

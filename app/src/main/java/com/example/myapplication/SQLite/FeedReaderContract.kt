@@ -23,7 +23,7 @@ object FeedReaderContract {
                 "${FeedEntry.COLUMN_TASK_DONE} BOOLEAN," +
                 "${FeedEntry.COLUMN_TASK_PRIORITY} TEXT, " +
                 "${FeedEntry.COLUMN_TASK_PRIORITY_GRADE} INTEGER , " +
-                "${FeedEntry.COLUMN_TASK_TIME} TEXT );"
+                "${FeedEntry.COLUMN_TASK_TIME} DATETIME );"
     const val SQL_INSERT_TASK =
         "INSERT INTO ${FeedEntry.TABLE_TASK} ( " +
                 "${FeedEntry.COLUMN_TASK_TITLE} , " +

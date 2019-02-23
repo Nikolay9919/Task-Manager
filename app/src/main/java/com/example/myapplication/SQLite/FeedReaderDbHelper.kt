@@ -46,11 +46,12 @@ class FeedReaderDbHelper(context: Context) :
 
 
 
-        Log.d("Cursor", cursor.toString())
+
 
 
         if (cursor.moveToFirst())
             do {
+                Log.d("time", cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME)))
                 val task = Task(
                     cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)),
                     cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE)),
@@ -94,7 +95,7 @@ class FeedReaderDbHelper(context: Context) :
                 ),
                 (cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME))).substring(
                     10,
-                    17
+                    19
                 )
 
             )
