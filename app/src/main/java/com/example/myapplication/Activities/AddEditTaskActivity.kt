@@ -1,7 +1,11 @@
 package com.example.myapplication.Activities
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
@@ -15,6 +19,8 @@ import com.example.myapplication.Models.Task
 import com.example.myapplication.R
 import com.example.myapplication.SQLite.FeedReaderDbHelper
 import kotlinx.android.synthetic.main.activity_add_task.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddEditTaskActivity : AppCompatActivity() {
 
@@ -23,6 +29,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     lateinit var priority: String
     var priorityGrade: Int = 0
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
@@ -37,24 +44,8 @@ class AddEditTaskActivity : AppCompatActivity() {
             editTextTitle.setText(task.title)
         }
         initSpinner()
-        fab.setOnClickListener { view ->
-            if (emptyValidation()) {
-                Snackbar.make(view, R.string.empty, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            } else {
-                if (taskId == -1L) {
-                    val title = editTextTitle.text.toString()
-                    val task = Task(null, title, false, priority, priorityGrade)
-                    Log.d("add", task.toString())
-                    dbHelper.addTask(task)
-                    goHome()
-                } else {
-                    val task: Task = dbHelper.getTask(taskId)
-                    dbHelper.updateTask(task)
-                    goHome()
-                }
-            }
-        }
+        initButtons()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -95,6 +86,56 @@ class AddEditTaskActivity : AppCompatActivity() {
             }
         }
         spinner.setSelection(1)
+    }
+
+    private fun initButtons() {
+        val dbHelper = FeedReaderDbHelper(applicationContext)
+        val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US)
+
+        button_date.setOnClickListener {
+            val now = Calendar.getInstance()
+            val datePicker = DatePickerDialog(
+                this, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                    val selectedDate = Calendar.getInstance()
+                    selectedDate.set(Calendar.YEAR, year)
+                    selectedDate.set(Calendar.MONTH, month)
+                    selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    val date = simpleDateFormat.format(selectedDate.time)
+                },
+                now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+            )
+            datePicker.show()
+        }
+
+        button_time.setOnClickListener {
+            val now = Calendar.getInstance()
+            val timePicker = TimePickerDialog(
+                this, TimePickerDialog.OnTimeSetListener { timePicker, hour, minute -> },
+                now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), true
+            )
+            timePicker.show()
+        }
+
+
+        fab.setOnClickListener { view ->
+            if (emptyValidation()) {
+                Snackbar.make(view, R.string.empty, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            } else {
+                if (taskId == -1L) {
+                    val title = editTextTitle.text.toString()
+                    val task = Task(null, title, false, priority, priorityGrade)
+                    Log.d("add", task.toString())
+                    dbHelper.addTask(task)
+                    goHome()
+                } else {
+                    val task: Task = dbHelper.getTask(taskId)
+                    dbHelper.updateTask(task)
+                    goHome()
+                }
+            }
+        }
     }
 
     private fun goHome() {
