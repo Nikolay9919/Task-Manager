@@ -32,6 +32,7 @@ class FeedReaderDbHelper(context: Context) :
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME, "${task.date} ${task.time}")
         }
         val newRow = db.insert(FeedReaderContract.FeedEntry.TABLE_TASK, null, values)
+        db.close()
     }
 
     @SuppressLint("Recycle")
@@ -40,15 +41,7 @@ class FeedReaderDbHelper(context: Context) :
 
         val selectQuery: String = "SELECT * FROM " + FeedReaderContract.FeedEntry.TABLE_TASK
         val cursor = db.rawQuery(selectQuery, null)
-
-
         val taskList = ArrayList<Task>()
-
-
-
-
-
-
         if (cursor.moveToFirst())
             do {
                 Log.d("time", cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME)))
@@ -70,6 +63,7 @@ class FeedReaderDbHelper(context: Context) :
                 taskList.add(task)
             } while (cursor.moveToNext())
         Log.d("AllTasksCursor", taskList.toString())
+        db.close()
         return taskList
     }
 
@@ -121,6 +115,7 @@ class FeedReaderDbHelper(context: Context) :
             FeedReaderContract.FeedEntry.TABLE_TASK, contentValues,
             BaseColumns._ID + " = " + task.id, null
         )
+        db.close()
 
     }
 
@@ -129,6 +124,7 @@ class FeedReaderDbHelper(context: Context) :
         val selection = "${BaseColumns._ID} LIKE " + taskId
         val db = writableDatabase
         db.delete(FeedReaderContract.FeedEntry.TABLE_TASK, selection, null)
+        db.close()
     }
 
     private fun changeToBool(int: Int): Boolean {

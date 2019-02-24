@@ -10,7 +10,6 @@ import com.example.myapplication.Models.Task
 import com.example.myapplication.R
 import com.example.myapplication.SQLite.FeedReaderDbHelper
 import com.example.myapplication.Service.NotificationIntentService
-import com.example.myapplication.Service.NotificationService
 import com.example.myapplication.TaskAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -19,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val taskList = ArrayList<Task>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         isEmpty()
 
 
-        fab.setOnClickListener {
+        fab_add.setOnClickListener {
             intent.putExtra("taskId", -1L)
             startActivity(intent)
         }
@@ -66,6 +66,28 @@ class MainActivity : AppCompatActivity() {
             tvNotTask.visibility = View.INVISIBLE
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        val intentService = Intent(this, NotificationIntentService::class.java)
+        startService(intentService)
+        super.onWindowFocusChanged(hasFocus)
+    }
 
+    override fun onDestroy() {
+        val intentService = Intent(this, NotificationIntentService::class.java)
+        startService(intentService)
+        super.onDestroy()
+    }
+
+    override fun onStop() {
+        val intentService = Intent(this, NotificationIntentService::class.java)
+        startService(intentService)
+        super.onStop()
+    }
+
+    override fun onPause() {
+        val intentService = Intent(this, NotificationIntentService::class.java)
+        startService(intentService)
+        super.onPause()
+    }
 }
 

@@ -79,10 +79,15 @@ class NotificationIntentService : IntentService("Notification") {
 
                 if (time.contains(timeNow)) {
                     startNotify(i.title, i.time)
+                    Log.d("service", i.toString())
+                    Thread.sleep(30000)
                     checkDateTime(taskList)
                 }
             }
 
         }
+        Log.d("service1", taskList.toString())
+        Thread.sleep(10000)
+        checkDateTime(getList())
     }
 }

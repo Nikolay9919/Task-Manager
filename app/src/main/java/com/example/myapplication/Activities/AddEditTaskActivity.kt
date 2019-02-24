@@ -1,7 +1,9 @@
 package com.example.myapplication.Activities
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -64,9 +66,18 @@ class AddEditTaskActivity : AppCompatActivity() {
         if (item != null && isEdit(taskId)) {
             when (item.itemId) {
                 R.id.action_delete -> {
-                    dbHelper.deleteTask(taskId)
-                    Log.d("delete", taskId.toString())
-                    goHome()
+                    val dialog = AlertDialog.Builder(this)
+                    dialog.setTitle("Are you sure?")
+                    dialog.setMessage("Do you want delete this Task?")
+                    dialog.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                        dbHelper.deleteTask(taskId)
+                        Log.d("delete", taskId.toString())
+                        goHome()
+                    }
+                    dialog.setNegativeButton("No") { _: DialogInterface, _: Int ->
+                    }
+
+                    dialog.show()
                 }
             }
         }
@@ -130,7 +141,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         }
 
 
-        fab.setOnClickListener { view ->
+        fab_add.setOnClickListener { view ->
             val title = editTextTitle.text.toString()
 
             if (taskId == -1L) {
@@ -152,6 +163,27 @@ class AddEditTaskActivity : AppCompatActivity() {
                 goHome()
             }
         }
+
+        if (taskId == -1L)
+            fab_delete.visibility = View.INVISIBLE
+        else {
+            fab_delete.setOnClickListener {
+                val dialog = AlertDialog.Builder(this)
+                dialog.setTitle("Are you sure?")
+                dialog.setMessage("Do you want delete this Task?")
+                dialog.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    dbHelper.deleteTask(taskId)
+                    Log.d("delete", taskId.toString())
+                    goHome()
+                }
+                dialog.setNegativeButton("No") { _: DialogInterface, _: Int ->
+                }
+
+                dialog.show()
+            }
+        }
+
+
     }
 
 
