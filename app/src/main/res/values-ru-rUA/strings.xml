@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Диспетчер задач</string>
+    <string name="low">Низкий приоритет</string>
+    <string name="medium">Средний приоритет</string>
+    <string name="high">Высокий приоритет</string>
+    <string name="task_title">Название задачи</string>
+    <string name="description">Описание</string>
+    <string name="priority">Приоритет</string>
+    <string name="task">Задача</string>
+    <string name="delete">Удалить</string>
+    <string name="no_tasks">Нет задач</string>
+    <string name="empty">Пустые поля (проверь даты и времени)</string>
+    <string name="are_sure">Уверены ли вы?</string>
+    <string name="delete_task">Вы хотите удалить эту задачу?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+</resources>
