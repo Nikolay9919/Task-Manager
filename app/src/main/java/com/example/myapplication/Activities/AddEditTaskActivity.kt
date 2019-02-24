@@ -200,4 +200,8 @@ class AddEditTaskActivity : AppCompatActivity() {
         return taskId != -1L
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        goHome()
+    }
 }

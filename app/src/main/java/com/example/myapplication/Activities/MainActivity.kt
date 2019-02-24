@@ -13,6 +13,7 @@ import com.example.myapplication.Service.NotificationIntentService
 import com.example.myapplication.TaskAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -88,6 +89,12 @@ class MainActivity : AppCompatActivity() {
         val intentService = Intent(this, NotificationIntentService::class.java)
         startService(intentService)
         super.onPause()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        moveTaskToBack(true)
+        exitProcess(-1)
     }
 }
 
