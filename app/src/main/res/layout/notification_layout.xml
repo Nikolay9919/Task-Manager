@@ -11,7 +11,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:padding="10dp"
-            android:src="@drawable/ic_launcher_round"/>
+            android:src="@android:drawable/ic_lock_idle_alarm"/>
     <LinearLayout
             android:layout_width="215dp"
             android:orientation="vertical"
