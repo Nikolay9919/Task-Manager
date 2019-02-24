@@ -67,14 +67,13 @@ class AddEditTaskActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.action_delete -> {
                     val dialog = AlertDialog.Builder(this)
-                    dialog.setTitle("Are you sure?")
-                    dialog.setMessage("Do you want delete this Task?")
-                    dialog.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                    dialog.setTitle(R.string.are_sure)
+                    dialog.setMessage(R.string.delete_task)
+                    dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
                         dbHelper.deleteTask(taskId)
-                        Log.d("delete", taskId.toString())
                         goHome()
                     }
-                    dialog.setNegativeButton("No") { _: DialogInterface, _: Int ->
+                    dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->
                     }
 
                     dialog.show()
@@ -169,14 +168,13 @@ class AddEditTaskActivity : AppCompatActivity() {
         else {
             fab_delete.setOnClickListener {
                 val dialog = AlertDialog.Builder(this)
-                dialog.setTitle("Are you sure?")
-                dialog.setMessage("Do you want delete this Task?")
-                dialog.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+                dialog.setTitle(R.string.are_sure)
+                dialog.setMessage(R.string.delete_task)
+                dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
                     dbHelper.deleteTask(taskId)
-                    Log.d("delete", taskId.toString())
                     goHome()
                 }
-                dialog.setNegativeButton("No") { _: DialogInterface, _: Int ->
+                dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->
                 }
 
                 dialog.show()
@@ -193,7 +191,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     private fun emptyValidation(): Boolean {
-        if (TextUtils.isEmpty("editTextTitle.text") || TextUtils.isEmpty(dateTask) || TextUtils.isEmpty(timeTask))
+        if (TextUtils.isEmpty(editTextTitle.text) || TextUtils.isEmpty(dateTask) || TextUtils.isEmpty(timeTask))
             return true
         return false
     }

@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Приложение</string>
-    <string name="low">нисък приоритет</string>
-    <string name="medium">среден приоритет</string>
-    <string name="high">висок приоритет</string>
+    <string name="app_name">Диспечер на задачите</string>
+    <string name="low">Нисък приоритет</string>
+    <string name="medium">Среден приоритет</string>
+    <string name="high">Висок приоритет</string>
     <string name="task_title">Заглавие на задачата</string>
-    <string name="description">описание</string>
-    <string name="priority">приоритет</string>
-    <string name="task">задача</string>
+    <string name="description">Описание</string>
+    <string name="priority">Приоритет</string>
+    <string name="task">Задача</string>
     <string name="delete">Удали</string>
     <string name="no_tasks">Няма задачи</string>
-    <string name="empty">празни полета</string>
+    <string name="empty">Празни полета</string>
+    <string name="are_sure">Сигурен ли си?</string>
+    <string name="delete_task">Искате ли да изтриете тази задача?</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
+    <string name="date">Дата</string>
+    <string name="time">Време</string>
 </resources>

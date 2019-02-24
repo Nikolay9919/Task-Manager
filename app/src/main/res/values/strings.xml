@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Task Manager</string>
     <string name="low">low priority</string>
     <string name="medium">medium priority</string>
     <string name="high">high priority</string>
@@ -10,4 +10,10 @@
     <string name="delete">Delete</string>
     <string name="no_tasks">No Tasks</string>
     <string name="empty">empty fields (Check Date and Time)</string>
+    <string name="are_sure">Are you sure?</string>
+    <string name="delete_task">Do you want delete this Task?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>

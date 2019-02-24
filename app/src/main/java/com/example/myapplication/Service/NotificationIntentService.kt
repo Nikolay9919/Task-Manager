@@ -8,6 +8,8 @@ import android.graphics.Color
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
+import android.widget.RemoteViews
+import com.example.myapplication.Activities.MainActivity
 import com.example.myapplication.Models.Task
 import com.example.myapplication.R
 import com.example.myapplication.SQLite.FeedReaderDbHelper
@@ -28,10 +30,17 @@ class NotificationIntentService : IntentService("Notification") {
         checkDateTime(getList())
     }
 
-    private fun startNotify(contentTitle: String, contentText: String) {
+    private fun startNotify(contentTitle: String, contentText: String, contentPriority: String) {
         val intent = Intent(this, LauncherActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val intentMain = Intent(this, MainActivity::class.java)
+        val intentMainP = PendingIntent.getActivity(this, 0, intentMain, PendingIntent.FLAG_UPDATE_CURRENT)
+        val contentView = RemoteViews(packageName, R.layout.notification_layout)
+        contentView.setTextViewText(R.id.tv_title, contentTitle)
+        contentView.setTextViewText(R.id.tv_content, contentText)
+        contentView.setTextViewText(R.id.tv_priority, contentPriority)
+        contentView.setOnClickPendingIntent(R.id.linear, intentMainP)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
 
@@ -41,13 +50,13 @@ class NotificationIntentService : IntentService("Notification") {
 
             notificationManager.createNotificationChannel(notificationChannel)
             builder = Notification.Builder(this, channelId)
-                .setContentTitle(contentTitle).setContentText(contentText)
+                .setContent(contentView)
                 .setSmallIcon(R.drawable.ic_launcher_round)
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_launcher))
                 .setContentIntent(pendingIntent)
         } else {
             builder = Notification.Builder(this)
-                .setContentTitle(contentTitle).setContentText(contentText)
+                .setContent(contentView)
                 .setSmallIcon(R.drawable.ic_launcher_round)
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ic_launcher))
                 .setContentIntent(pendingIntent)
@@ -78,9 +87,9 @@ class NotificationIntentService : IntentService("Notification") {
             if (i.date.contains(LocalDate.now().toString())) {
 
                 if (time.contains(timeNow)) {
-                    startNotify(i.title, i.time)
+                    startNotify(i.title, time, i.Priority)
                     Log.d("service", i.toString())
-                    Thread.sleep(30000)
+                    Thread.sleep(40000)
                     checkDateTime(taskList)
                 }
             }
