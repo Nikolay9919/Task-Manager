@@ -218,7 +218,7 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     private fun isEdit(taskId: Long): Boolean {
         return taskId != -1L
-    }
+    } // Check whether to be edited
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
         super.onSaveInstanceState(outState, outPersistentState)
