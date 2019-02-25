@@ -3,17 +3,16 @@ package com.nikolay.taskManager.Activities
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import com.nikolay.taskManager.Adapter.TaskAdapter
 import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.R
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import com.nikolay.taskManager.Service.NotificationIntentService
+import kotlinx.android.synthetic.main.activity_add_tasks.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlin.system.exitProcess
@@ -37,8 +36,13 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-        val intent = Intent(this, AddEditTaskActivity::class.java)
         fab_add.setOnClickListener {
+            val intent = Intent(this, AddEditTaskActivity::class.java)
+            intent.putExtra("taskId", -1L) // task is null
+            startActivity(intent)
+        }
+        fab_multiple_add.setOnClickListener {
+            val intent = Intent(this, AddTasks::class.java)
             intent.putExtra("taskId", -1L) // task is null
             startActivity(intent)
         }
