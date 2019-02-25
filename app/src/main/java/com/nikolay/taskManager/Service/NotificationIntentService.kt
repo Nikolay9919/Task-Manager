@@ -31,16 +31,13 @@ class NotificationIntentService : IntentService("Notification") {
     }
 
     private fun startNotify(contentTitle: String, contentText: String, contentPriority: String) {
-        val intent = Intent(this, LauncherActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val intentMain = Intent(this, MainActivity::class.java)
-        val intentMainP = PendingIntent.getActivity(this, 0, intentMain, PendingIntent.FLAG_UPDATE_CURRENT)
         val contentView = RemoteViews(packageName, R.layout.notification_layout)
         contentView.setTextViewText(R.id.tv_title, contentTitle)
         contentView.setTextViewText(R.id.tv_content, contentText)
         contentView.setTextViewText(R.id.tv_priority, contentPriority)
-        contentView.setOnClickPendingIntent(R.id.linear, intentMainP)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
 

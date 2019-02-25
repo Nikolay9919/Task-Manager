@@ -11,7 +11,6 @@ import android.support.annotation.RequiresApi
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -32,7 +31,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     var priorityGrade: Int = 0
     private var dateTask: String = ""
     private var timeTask: String = ""
-    private  var taskId : Long = 0
+    private var taskId: Long = 0
 
     private var dbHelper: FeedReaderDbHelper? = null
     @RequiresApi(Build.VERSION_CODES.N)
@@ -52,6 +51,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         if (isEdit(taskId)) {
             val task: Task = dbHelper!!.getTask(taskId)
             editTextTitle.setText(task.title)
+            initTV(task.title, task.Priority, task.date + task.time)
         }
         initSpinner()
         initButtons()
@@ -61,6 +61,18 @@ class AddEditTaskActivity : AppCompatActivity() {
     override fun onDestroy() {
         dbHelper!!.close()
         super.onDestroy()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        goHome()
+    }
+
+    private fun initTV(title: String, priority: String, time: String) {
+        tv_title.text = "$title"
+        tv_priority.text = "$priority"
+        tv_time.text = "$time"
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -113,7 +125,7 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     private fun initButtons() {
         dbHelper = FeedReaderDbHelper(applicationContext)
-        val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
+        val taskId: Long = intent.getLongExtra("taskId", taskId)
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val simpleTimeFormat = SimpleDateFormat("HH:mm:SS", Locale.US)
         if (timeTask.isEmpty()) timeTask = dbHelper!!.getTask(taskId).time
@@ -137,7 +149,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         button_time.setOnClickListener {
             val now = Calendar.getInstance()
             val timePicker = TimePickerDialog(
-                this, TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                     val selectedTime = Calendar.getInstance()
                     selectedTime.set(Calendar.HOUR_OF_DAY, hour)
                     selectedTime.set(Calendar.MINUTE, minute)
@@ -163,7 +175,6 @@ class AddEditTaskActivity : AppCompatActivity() {
 
 
                     if (task.date.isEmpty()) task.date = "0000-00-00"
-                    Log.d("add", task.toString())
                     dbHelper!!.addTask(task)
                     goHome()
                 }
@@ -195,7 +206,6 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     }
 
-
     private fun goHome() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
@@ -211,8 +221,5 @@ class AddEditTaskActivity : AppCompatActivity() {
         return taskId != -1L
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        goHome()
-    }
+
 }

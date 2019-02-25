@@ -26,17 +26,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        val intent = Intent(this, AddEditTaskActivity::class.java)
-        fab_add.setOnClickListener {
-            intent.putExtra("taskId", -1L)
-            startActivity(intent)
-        }
+
 
     }
 
 
     override fun onResume() {
         super.onResume()
+        val intent = Intent(this, AddEditTaskActivity::class.java)
+        fab_add.setOnClickListener {
+            intent.putExtra("taskId", -1L)
+            startActivity(intent)
+        }
         val intentService = Intent(this, NotificationIntentService::class.java)
         startService(intentService)
         updateList()
