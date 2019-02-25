@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
-import kotlinx.android.synthetic.main.activity_add_task.*
 import kotlinx.android.synthetic.main.activity_add_tasks.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,7 +36,7 @@ class AddTasks : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.nikolay.taskManager.R.layout.activity_add_tasks)
         dbHelper = FeedReaderDbHelper(applicationContext)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar_2)
         initSpinners()
         initButtons()
     }
