@@ -28,6 +28,7 @@ class NotificationIntentService : IntentService("Notification") {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onHandleIntent(p0: Intent?) {
         checkDateTime(getList())
+
     }
 
     private fun startNotify(contentTitle: String, contentText: String, contentPriority: String) {
@@ -68,7 +69,7 @@ class NotificationIntentService : IntentService("Notification") {
         val dbHelper = FeedReaderDbHelper(applicationContext)
         dbHelper.getAllTasks()?.let { taskList.addAll(it) }
         return taskList
-    }
+    } // Get List of Tasks
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkDateTime(taskList: ArrayList<Task>) {
@@ -94,5 +95,5 @@ class NotificationIntentService : IntentService("Notification") {
         Log.d("service1", taskList.toString())
         Thread.sleep(10000)
         checkDateTime(getList())
-    }
+    } // Check date and time of task with date and time now
 }

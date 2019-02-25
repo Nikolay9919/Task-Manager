@@ -1,8 +1,10 @@
 package com.nikolay.taskManager.Activities
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -32,29 +34,29 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
         val intent = Intent(this, AddEditTaskActivity::class.java)
         fab_add.setOnClickListener {
-            intent.putExtra("taskId", -1L)
+            intent.putExtra("taskId", -1L) // task is null
             startActivity(intent)
         }
         val intentService = Intent(this, NotificationIntentService::class.java)
         startService(intentService)
-        updateList()
-        isEmpty()
+        updateList() // get or update list of tasks
+        isEmpty() // check list of tasks (is empty)
     }
 
     private fun updateList() {
         taskList.clear()
         dbHelper = FeedReaderDbHelper(applicationContext)
         dbHelper!!.getAllTasks()?.let { taskList.addAll(it) }
-        taskList.sortByDescending { it.PriorityGrade }
+        taskList.sortByDescending { it.PriorityGrade } // sorting list by priority
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = TaskAdapter(taskList) {
             val intent = Intent(this, AddEditTaskActivity::class.java)
-            Log.d("tap", it.id.toString())
-            intent.putExtra("taskId", it.id)
+            intent.putExtra("taskId", it.id) // put task id to next activity(if task is null, task id is -1L)
             startActivity(intent)
         }
 
