@@ -1,19 +1,21 @@
-package com.example.myapplication
+package com.nikolay.taskManager.Adapter
 
+import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.myapplication.Models.Task
-import com.example.myapplication.SQLite.FeedReaderDbHelper
+import com.nikolay.taskManager.Models.Task
+import com.nikolay.taskManager.R
+import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import kotlinx.android.synthetic.main.item_task.view.*
 
 
 class TaskAdapter(private val taskList: List<Task>, private val listener: (Task) -> Unit) :
     RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
-    override fun onBindViewHolder(holder: TaskAdapter.TaskViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(taskList[position], listener)
 
     }
@@ -26,6 +28,7 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
     }
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @SuppressLint("SetTextI18n")
         fun bind(task: Task, listener: (Task) -> Unit) = with(itemView) {
             tvTitle.text = task.title
             tvTime.text = task.date + task.time

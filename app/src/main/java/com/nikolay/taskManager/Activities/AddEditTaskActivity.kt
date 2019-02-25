@@ -1,4 +1,4 @@
-package com.example.myapplication.Activities
+package com.nikolay.taskManager.Activities
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -17,9 +17,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.example.myapplication.Models.Task
-import com.example.myapplication.R
-import com.example.myapplication.SQLite.FeedReaderDbHelper
+import com.nikolay.taskManager.Models.Task
+import com.nikolay.taskManager.R
+import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import kotlinx.android.synthetic.main.activity_add_task.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,24 +32,35 @@ class AddEditTaskActivity : AppCompatActivity() {
     var priorityGrade: Int = 0
     private var dateTask: String = ""
     private var timeTask: String = ""
+    private  var taskId : Long = 0
 
+    private var dbHelper: FeedReaderDbHelper? = null
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
         setSupportActionBar(toolbar)
-        val dbHelper = FeedReaderDbHelper(applicationContext)
+        dbHelper = FeedReaderDbHelper(applicationContext)
 
         val intent: Intent = intent
-        val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
-        Log.d("taskId", taskId.toString())
+        taskId = intent.getLongExtra("taskId", taskId)
+
+
+    }
+
+    override fun onStart() {
         if (isEdit(taskId)) {
-            val task: Task = dbHelper.getTask(taskId)
+            val task: Task = dbHelper!!.getTask(taskId)
             editTextTitle.setText(task.title)
         }
         initSpinner()
         initButtons()
+        super.onStart()
+    }
 
+    override fun onDestroy() {
+        dbHelper!!.close()
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,7 +73,7 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
-        val dbHelper = FeedReaderDbHelper(applicationContext)
+        dbHelper = FeedReaderDbHelper(applicationContext)
         if (item != null && isEdit(taskId)) {
             when (item.itemId) {
                 R.id.action_delete -> {
@@ -70,7 +81,7 @@ class AddEditTaskActivity : AppCompatActivity() {
                     dialog.setTitle(R.string.are_sure)
                     dialog.setMessage(R.string.delete_task)
                     dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
-                        dbHelper.deleteTask(taskId)
+                        dbHelper!!.deleteTask(taskId)
                         goHome()
                     }
                     dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->
@@ -101,16 +112,16 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     private fun initButtons() {
-        val dbHelper = FeedReaderDbHelper(applicationContext)
+        dbHelper = FeedReaderDbHelper(applicationContext)
         val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val simpleTimeFormat = SimpleDateFormat("HH:mm:SS", Locale.US)
-        if (timeTask.isEmpty()) timeTask = dbHelper.getTask(taskId).time
-        if (dateTask.isEmpty()) dateTask = dbHelper.getTask(taskId).date
+        if (timeTask.isEmpty()) timeTask = dbHelper!!.getTask(taskId).time
+        if (dateTask.isEmpty()) dateTask = dbHelper!!.getTask(taskId).date
         button_date.setOnClickListener {
             val now = Calendar.getInstance()
             val datePicker = DatePickerDialog(
-                this, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     val selectedDate = Calendar.getInstance()
                     selectedDate.set(Calendar.YEAR, year)
                     selectedDate.set(Calendar.MONTH, month)
@@ -153,12 +164,12 @@ class AddEditTaskActivity : AppCompatActivity() {
 
                     if (task.date.isEmpty()) task.date = "0000-00-00"
                     Log.d("add", task.toString())
-                    dbHelper.addTask(task)
+                    dbHelper!!.addTask(task)
                     goHome()
                 }
             } else {
                 val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
-                dbHelper.updateTask(task)
+                dbHelper!!.updateTask(task)
                 goHome()
             }
         }
@@ -171,7 +182,7 @@ class AddEditTaskActivity : AppCompatActivity() {
                 dialog.setTitle(R.string.are_sure)
                 dialog.setMessage(R.string.delete_task)
                 dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
-                    dbHelper.deleteTask(taskId)
+                    dbHelper!!.deleteTask(taskId)
                     goHome()
                 }
                 dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->

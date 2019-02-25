@@ -1,4 +1,4 @@
-package com.example.myapplication.SQLite
+package com.nikolay.taskManager.SQLite
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import android.util.Log
-import com.example.myapplication.Models.Task
+import com.nikolay.taskManager.Models.Task
 
 class FeedReaderDbHelper(context: Context) :
     SQLiteOpenHelper(context, FeedReaderContract.FeedEntry.DbName, null, FeedReaderContract.FeedEntry.DbVersion) {

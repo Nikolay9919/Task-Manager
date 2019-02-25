@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.nikolay.taskManager
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

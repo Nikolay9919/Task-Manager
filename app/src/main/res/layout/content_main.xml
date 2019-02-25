@@ -31,4 +31,5 @@
 
             android:text="@string/no_tasks"/>
 
+
 </android.support.constraint.ConstraintLayout>

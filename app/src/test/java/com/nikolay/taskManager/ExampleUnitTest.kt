@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.nikolay.taskManager
 
 import org.junit.Test
 

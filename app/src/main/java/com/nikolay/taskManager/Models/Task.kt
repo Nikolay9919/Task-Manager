@@ -1,4 +1,4 @@
-package com.example.myapplication.Models
+package com.nikolay.taskManager.Models
 
 data class Task(
     var id: Long?,

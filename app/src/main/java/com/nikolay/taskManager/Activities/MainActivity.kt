@@ -1,4 +1,4 @@
-package com.example.myapplication.Activities
+package com.nikolay.taskManager.Activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
-import com.example.myapplication.Models.Task
-import com.example.myapplication.R
-import com.example.myapplication.SQLite.FeedReaderDbHelper
-import com.example.myapplication.Service.NotificationIntentService
-import com.example.myapplication.TaskAdapter
+import com.nikolay.taskManager.Adapter.TaskAdapter
+import com.nikolay.taskManager.Models.Task
+import com.nikolay.taskManager.R
+import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
+import com.nikolay.taskManager.Service.NotificationIntentService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlin.system.exitProcess
@@ -20,18 +20,13 @@ class MainActivity : AppCompatActivity() {
 
     private val taskList = ArrayList<Task>()
 
+    private var dbHelper: FeedReaderDbHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         val intent = Intent(this, AddEditTaskActivity::class.java)
-        val intentService = Intent(this, NotificationIntentService::class.java)
-        startService(intentService)
-        updateList()
-        isEmpty()
-
-
         fab_add.setOnClickListener {
             intent.putExtra("taskId", -1L)
             startActivity(intent)
@@ -42,13 +37,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val intentService = Intent(this, NotificationIntentService::class.java)
+        startService(intentService)
         updateList()
+        isEmpty()
     }
 
     private fun updateList() {
         taskList.clear()
-        val dbHelper = FeedReaderDbHelper(applicationContext)
-        dbHelper.getAllTasks()?.let { taskList.addAll(it) }
+        dbHelper = FeedReaderDbHelper(applicationContext)
+        dbHelper!!.getAllTasks()?.let { taskList.addAll(it) }
         taskList.sortByDescending { it.PriorityGrade }
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = TaskAdapter(taskList) {
@@ -67,27 +65,19 @@ class MainActivity : AppCompatActivity() {
             tvNotTask.visibility = View.INVISIBLE
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        val intentService = Intent(this, NotificationIntentService::class.java)
-        startService(intentService)
-        super.onWindowFocusChanged(hasFocus)
-    }
 
     override fun onDestroy() {
-        val intentService = Intent(this, NotificationIntentService::class.java)
-        startService(intentService)
+        dbHelper!!.close()
         super.onDestroy()
     }
 
     override fun onStop() {
-        val intentService = Intent(this, NotificationIntentService::class.java)
-        startService(intentService)
+        dbHelper!!.close()
         super.onStop()
     }
 
     override fun onPause() {
-        val intentService = Intent(this, NotificationIntentService::class.java)
-        startService(intentService)
+        dbHelper!!.close()
         super.onPause()
     }
 

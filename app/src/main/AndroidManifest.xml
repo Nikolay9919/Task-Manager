@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.myapplication">
+          package="com.nikolay.taskManager">
 
     <application
             android:allowBackup="true"
@@ -10,15 +10,15 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".Activities.AddEditTaskActivity"/>
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name="com.nikolay.taskManager.Activities.AddEditTaskActivity"/>
+        <activity android:name="com.nikolay.taskManager.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <service android:name=".Service.NotificationIntentService">
+        <service android:name="com.nikolay.taskManager.Service.NotificationIntentService">
             <intent-filter android:priority="1">
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

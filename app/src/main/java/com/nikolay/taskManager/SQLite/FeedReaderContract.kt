@@ -1,4 +1,4 @@
-package com.example.myapplication.SQLite
+package com.nikolay.taskManager.SQLite
 
 import android.provider.BaseColumns
 

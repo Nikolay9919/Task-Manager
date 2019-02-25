@@ -1,4 +1,4 @@
-package com.example.myapplication.Service
+package com.nikolay.taskManager.Service
 
 import android.app.*
 import android.content.Context
@@ -9,10 +9,10 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
 import android.widget.RemoteViews
-import com.example.myapplication.Activities.MainActivity
-import com.example.myapplication.Models.Task
-import com.example.myapplication.R
-import com.example.myapplication.SQLite.FeedReaderDbHelper
+import com.nikolay.taskManager.Activities.MainActivity
+import com.nikolay.taskManager.Models.Task
+import com.nikolay.taskManager.R
+import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalTime
@@ -20,9 +20,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class NotificationIntentService : IntentService("Notification") {
-    lateinit var notificationManager: NotificationManager
-    lateinit var notificationChannel: NotificationChannel
-    lateinit var builder: Notification.Builder
+    private lateinit var notificationManager: NotificationManager
+    private lateinit var notificationChannel: NotificationChannel
+    private lateinit var builder: Notification.Builder
     private val channelId = "com.example.myapplication"
     private val description = "Test Notification"
     @RequiresApi(Build.VERSION_CODES.O)
@@ -65,7 +65,6 @@ class NotificationIntentService : IntentService("Notification") {
             notificationManager.notify(1234, builder.build())
         }
     }
-
 
     private fun getList(): ArrayList<Task> {
         val taskList = ArrayList<Task>()
