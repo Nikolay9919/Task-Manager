@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.annotation.RequiresApi
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -32,18 +33,16 @@ class AddEditTaskActivity : AppCompatActivity() {
     private var dateTask: String = ""
     private var timeTask: String = ""
     private var taskId: Long = 0
-
     private var dbHelper: FeedReaderDbHelper? = null
+
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
         setSupportActionBar(toolbar)
         dbHelper = FeedReaderDbHelper(applicationContext)
-
         val intent: Intent = intent
         taskId = intent.getLongExtra("taskId", taskId)
-
 
     }
 
@@ -69,9 +68,9 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     private fun initTV(title: String, priority: String, time: String) {
-        tv_title.text = "$title"
-        tv_priority.text = "$priority"
-        tv_time.text = "$time"
+        tv_title.text = title
+        tv_priority.text = priority
+        tv_time.text = time
 
     }
 
@@ -221,5 +220,25 @@ class AddEditTaskActivity : AppCompatActivity() {
         return taskId != -1L
     }
 
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState?.putString("dateTask", dateTask)
+        outState?.putString("timeTask", timeTask)
+        outState?.putLong("taskId", taskId)
+        outState?.putStringArray("priorities", priorities)
+        outState?.putString("priority", priority)
+        outState?.putInt("priorityGrade", priorityGrade)
+    }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        dateTask = savedInstanceState?.get("dateTask") as String
+        timeTask = savedInstanceState.get("timeTask") as String
+        taskId = savedInstanceState.get("taskId") as Long
+        priorities = savedInstanceState.get("priorities") as Array<String>
+        priority = savedInstanceState.get("priority") as String
+        priorityGrade = savedInstanceState.get("priorityGrade") as Int
+
+    }
 }
