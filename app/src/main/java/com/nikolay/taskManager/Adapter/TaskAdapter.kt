@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.R
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
@@ -17,7 +18,16 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(taskList[position], listener)
+        setAnimation(holder.itemView)
 
+
+    }
+
+    private fun setAnimation(viewToAnimate: View) {
+        if (viewToAnimate.animation == null) {
+            val animation = AnimationUtils.loadAnimation(viewToAnimate.context, android.R.anim.slide_in_left)
+            viewToAnimate.animation = animation
+        }
     }
 
     override fun getItemCount() = taskList.size
@@ -52,9 +62,11 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
                 dbHelper.updateTask(editedTask)
                 Log.d("adapterDone", editedTask.toString() + checkbox.isChecked)
             }
+
         }
 
     }
+
 }
 
 

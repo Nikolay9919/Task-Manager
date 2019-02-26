@@ -123,6 +123,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         spinner.setSelection(1)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initButtons() {
         dbHelper = FeedReaderDbHelper(applicationContext)
         val taskId: Long = intent.getLongExtra("taskId", taskId)
@@ -143,6 +144,7 @@ class AddEditTaskActivity : AppCompatActivity() {
                 },
                 now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
             )
+            datePicker.datePicker.minDate = now.timeInMillis
             datePicker.show()
         }
 
