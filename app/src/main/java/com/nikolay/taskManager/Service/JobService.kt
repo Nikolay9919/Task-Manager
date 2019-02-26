@@ -64,6 +64,7 @@ class JobService : JobService() {
                 Log.d("service1", taskList.toString())
             }
         }
+
         jobFinished(jobParameters, true)
 
     }
