@@ -3,7 +3,6 @@ package com.nikolay.taskManager.Fragments
 import android.R
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -13,14 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.nikolay.taskManager.Activities.MainActivity
 import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import kotlinx.android.synthetic.main.activity_add_tasks.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddTasksFragment : Fragment(){
+class AddTasksFragment : Fragment() {
     private var priorities = arrayOf("Low Priority", "Medium Priority", "High Priority")
     lateinit var priority1: String
     var priorityGrade1: Int = 0
@@ -46,6 +44,7 @@ class AddTasksFragment : Fragment(){
         initSpinners()
         initButtons()
     }
+
     private fun initSpinners() {
         val adapter = ArrayAdapter(activity, R.layout.simple_spinner_dropdown_item, priorities)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -212,7 +211,6 @@ class AddTasksFragment : Fragment(){
 
         }
     }
-
 
 
     private fun emptyValidation(): Boolean {

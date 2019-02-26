@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity() {
             val bundle = Bundle()
             val transaction = manager.beginTransaction()
             val fragment = AddTaskFragment()
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             transaction.replace(R.id.fragment_holder, fragment)
             bundle.putLong("taskId", it.id!!)
             fragment.arguments = bundle
