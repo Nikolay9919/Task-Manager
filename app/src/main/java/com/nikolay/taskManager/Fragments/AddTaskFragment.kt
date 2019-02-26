@@ -24,6 +24,8 @@ import kotlinx.android.synthetic.main.activity_add_task.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+
 class AddTaskFragment : Fragment() {
 
     private var priorities = arrayOf("Low Priority", "Medium Priority", "High Priority")
@@ -145,13 +147,14 @@ class AddTaskFragment : Fragment() {
                     val task = Task(null, title, false, priority, priorityGrade, dateTask, timeTask)
                     Log.d("taskIdAdd", task.toString())
                     dbHelper!!.addTask(task)
-
+                    activity!!.fragmentManager.popBackStack()
+                    closeFragment()
                 }
             } else {
                 val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
                 Log.d("taskIdUpdate", task.toString())
                 dbHelper!!.updateTask(task)
-                activity!!.onBackPressed()
+                closeFragment()
             }
         }
 
@@ -160,12 +163,13 @@ class AddTaskFragment : Fragment() {
             fab_delete.visibility = View.INVISIBLE
         else {
             fab_delete.setOnClickListener {
-                val dialog = AlertDialog.Builder(activity!!.applicationContext)
+                val dialog = AlertDialog.Builder(activity)
                 dialog.setTitle(R.string.are_sure)
                 dialog.setMessage(R.string.delete_task)
                 dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
                     dbHelper!!.deleteTask(taskId)
-                    activity!!.onBackPressed()
+                    closeFragment()
+
                 }
                 dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->
                 }
@@ -187,5 +191,7 @@ class AddTaskFragment : Fragment() {
         return taskId != -1L
     } // Check whether to be edited
 
-
+    private fun closeFragment() {
+        activity!!.onBackPressed()
+    }
 }
