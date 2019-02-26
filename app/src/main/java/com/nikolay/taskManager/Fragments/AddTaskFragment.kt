@@ -1,21 +1,20 @@
-package com.nikolay.taskManager.Activities
+package com.nikolay.taskManager.Fragments
 
-import android.annotation.TargetApi
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.annotation.RequiresApi
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
 import android.text.TextUtils
-import android.view.Menu
-import android.view.MenuItem
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.nikolay.taskManager.Models.Task
@@ -25,8 +24,7 @@ import kotlinx.android.synthetic.main.activity_add_task.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AddEditTaskActivity : AppCompatActivity() {
-
+class AddTaskFragment : Fragment() {
 
     private var priorities = arrayOf("Low Priority", "Medium Priority", "High Priority")
     lateinit var priority: String
@@ -35,21 +33,25 @@ class AddEditTaskActivity : AppCompatActivity() {
     private var timeTask: String = ""
     private var taskId: Long = 0
     private var dbHelper: FeedReaderDbHelper? = null
-
-    @TargetApi(Build.VERSION_CODES.O)
-    @RequiresApi(Build.VERSION_CODES.N)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_task)
-        setSupportActionBar(toolbar)
-        dbHelper = FeedReaderDbHelper(applicationContext)
-        val intent: Intent = intent
-        taskId = intent.getLongExtra("taskId", taskId) // getting task id
-        initSpinner()
-        initButtons()
-
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+         taskId = arguments!!.getLong("taskId", taskId)
+        Log.d("taskIdFragment", arguments!!.getLong("taskId", taskId).toString())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        dbHelper = FeedReaderDbHelper(activity!!.applicationContext)
+
+        return inflater.inflate(R.layout.activity_add_task, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initSpinner()
+        initButtons(taskId)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -65,11 +67,6 @@ class AddEditTaskActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        goHome()
-    }
-
     private fun initTV(title: String, priority: String, time: String) {
         tv_title.text = title
         tv_priority.text = priority
@@ -77,39 +74,10 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val taskId: Long = intent.getLongExtra("taskId", taskId)
-        return if (isEdit(taskId)) {
-            menuInflater.inflate(R.menu.menu, menu)
-            true
-        } else false
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val taskId: Long = intent.getLongExtra("taskId", taskId)
-        dbHelper = FeedReaderDbHelper(applicationContext)
-        if (item != null && isEdit(taskId)) {
-            when (item.itemId) {
-                R.id.action_delete -> {
-                    val dialog = AlertDialog.Builder(this)
-                    dialog.setTitle(R.string.are_sure)
-                    dialog.setMessage(R.string.delete_task)
-                    dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
-                        dbHelper!!.deleteTask(taskId)
-                        goHome()
-                    }
-                    dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->
-                    }
-
-                    dialog.show()
-                }
-            }
-        }
-        return true
-    }
 
     private fun initSpinner() {
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, priorities)
+        val adapter =
+            ArrayAdapter(activity, android.R.layout.simple_spinner_dropdown_item, priorities)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -126,9 +94,8 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initButtons() {
-        dbHelper = FeedReaderDbHelper(applicationContext)
-        val taskId: Long = intent.getLongExtra("taskId", taskId)
+    private fun initButtons(taskId: Long) {
+        dbHelper = FeedReaderDbHelper(activity!!.applicationContext)
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         val simpleTimeFormat = SimpleDateFormat("HH:mm:SS", Locale.US)
         if (timeTask.isEmpty()) timeTask = dbHelper!!.getTask(taskId).time
@@ -136,7 +103,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         button_date.setOnClickListener {
             val now = Calendar.getInstance()
             val datePicker = DatePickerDialog(
-                this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                activity, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                     val selectedDate = Calendar.getInstance()
                     selectedDate.set(Calendar.YEAR, year)
                     selectedDate.set(Calendar.MONTH, month)
@@ -153,7 +120,7 @@ class AddEditTaskActivity : AppCompatActivity() {
         button_time.setOnClickListener {
             val now = Calendar.getInstance()
             val timePicker = TimePickerDialog(
-                this, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+                activity, TimePickerDialog.OnTimeSetListener { _, hour, minute ->
                     val selectedTime = Calendar.getInstance()
                     selectedTime.set(Calendar.HOUR_OF_DAY, hour)
                     selectedTime.set(Calendar.MINUTE, minute)
@@ -176,26 +143,29 @@ class AddEditTaskActivity : AppCompatActivity() {
                         .setAction("Action", null).show()
                 } else {
                     val task = Task(null, title, false, priority, priorityGrade, dateTask, timeTask)
+                    Log.d("taskIdAdd", task.toString())
                     dbHelper!!.addTask(task)
-                    goHome()
+
                 }
             } else {
                 val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
+                Log.d("taskIdUpdate", task.toString())
                 dbHelper!!.updateTask(task)
-                goHome()
+                activity!!.onBackPressed()
             }
         }
 
+        Log.d("taskidininit", taskId.toString())
         if (taskId == -1L)
             fab_delete.visibility = View.INVISIBLE
         else {
             fab_delete.setOnClickListener {
-                val dialog = AlertDialog.Builder(this)
+                val dialog = AlertDialog.Builder(activity!!.applicationContext)
                 dialog.setTitle(R.string.are_sure)
                 dialog.setMessage(R.string.delete_task)
                 dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
                     dbHelper!!.deleteTask(taskId)
-                    goHome()
+                    activity!!.onBackPressed()
                 }
                 dialog.setNegativeButton(R.string.no) { _: DialogInterface, _: Int ->
                 }
@@ -207,11 +177,6 @@ class AddEditTaskActivity : AppCompatActivity() {
 
     }
 
-    private fun goHome() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-    } // to Main Activity
-
     private fun emptyValidation(): Boolean {
         if (TextUtils.isEmpty(editTextTitle.text) || TextUtils.isEmpty(dateTask) || TextUtils.isEmpty(timeTask))
             return true
@@ -222,25 +187,5 @@ class AddEditTaskActivity : AppCompatActivity() {
         return taskId != -1L
     } // Check whether to be edited
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState?.putString("dateTask", dateTask)
-        outState?.putString("timeTask", timeTask)
-        outState?.putLong("taskId", taskId)
-        outState?.putStringArray("priorities", priorities)
-        outState?.putString("priority", priority)
-        outState?.putInt("priorityGrade", priorityGrade)
-    }
 
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-//        super.onRestoreInstanceState(savedInstanceState)
-//
-//        dateTask = savedInstanceState?.get("dateTask") as String
-//        timeTask = savedInstanceState.get("timeTask") as String
-//        taskId = savedInstanceState.get("taskId") as Long
-//        priorities = savedInstanceState.get("priorities") as Array<String>
-//        priority = savedInstanceState.get("priority") as String
-//        priorityGrade = savedInstanceState.get("priorityGrade") as Int
-//
-//    }
 }

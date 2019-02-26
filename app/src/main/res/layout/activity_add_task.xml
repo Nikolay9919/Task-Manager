@@ -4,7 +4,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/cardview_light_background"
+        android:clickable="true">
     <android.support.design.widget.AppBarLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -63,7 +65,7 @@
 
     <android.support.design.widget.FloatingActionButton
             android:layout_width="wrap_content"
-            android:id="@+id/fab_add"
+            android:id="@+id/fab_add_fragment"
             android:layout_gravity="bottom|end"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_input_add"

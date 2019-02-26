@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.nikolay.taskManager.Adapter.TaskAdapter
+import com.nikolay.taskManager.Fragments.AddTaskFragment
+import com.nikolay.taskManager.Fragments.AddTasksFragment
 import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.R
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     private val taskList = ArrayList<Task>()
     private var dbHelper: FeedReaderDbHelper? = null
+    val manager = supportFragmentManager
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,14 +60,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun initButtons() {
         fab_add.setOnClickListener {
-            val intent = Intent(this, AddEditTaskActivity::class.java)
-            intent.putExtra("taskId", -1L) // task is null
-            startActivity(intent)
+            val bundle = Bundle()
+            val transaction = manager.beginTransaction()
+            val fragment = AddTaskFragment()
+            transaction.replace(R.id.fragment_holder, fragment)
+            bundle.putLong("taskId", -1L)
+            fragment.arguments = bundle
+            transaction.addToBackStack(null)
+            transaction.commit()
+            fab_add.visibility = View.GONE
+            fab_multiple_add.visibility = View.GONE
+
         }
         fab_multiple_add.setOnClickListener {
-            val intent = Intent(this, AddTasks::class.java)
-            intent.putExtra("taskId", -1L) // task is null
-            startActivity(intent)
+            val transaction = manager.beginTransaction()
+            val fragment = AddTasksFragment()
+            transaction.replace(R.id.fragment_holder, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
         }
     }
 
@@ -112,7 +126,6 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         moveTaskToBack(true)
-        exitProcess(-1)
     }
 
 
