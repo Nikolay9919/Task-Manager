@@ -21,9 +21,9 @@ import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.R
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import kotlinx.android.synthetic.main.activity_add_task.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 
 class AddTaskFragment : Fragment() {
@@ -38,7 +38,7 @@ class AddTaskFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-         taskId = arguments!!.getLong("taskId", taskId)
+        taskId = arguments!!.getLong("taskId", taskId)
         Log.d("taskIdFragment", arguments!!.getLong("taskId", taskId).toString())
     }
 
@@ -136,6 +136,7 @@ class AddTaskFragment : Fragment() {
         }
 
 
+
         fab_add_fragment.setOnClickListener { view ->
             val title = editTextTitle.text.toString()
 
@@ -147,7 +148,6 @@ class AddTaskFragment : Fragment() {
                     val task = Task(null, title, false, priority, priorityGrade, dateTask, timeTask)
                     Log.d("taskIdAdd", task.toString())
                     dbHelper!!.addTask(task)
-                    activity!!.fragmentManager.popBackStack()
                     closeFragment()
                 }
             } else {
@@ -168,6 +168,7 @@ class AddTaskFragment : Fragment() {
                 dialog.setMessage(R.string.delete_task)
                 dialog.setPositiveButton(R.string.yes) { _: DialogInterface, _: Int ->
                     dbHelper!!.deleteTask(taskId)
+
                     closeFragment()
 
                 }
@@ -193,5 +194,6 @@ class AddTaskFragment : Fragment() {
 
     private fun closeFragment() {
         activity!!.onBackPressed()
+
     }
 }

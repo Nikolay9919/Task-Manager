@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     private fun initButtons() {
         fab_add.setOnClickListener {
             val bundle = Bundle()
@@ -72,6 +73,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateList() {
+        fab_add.visibility = View.VISIBLE
+        fab_multiple_add.visibility = View.VISIBLE
         taskList.clear()
         dbHelper = FeedReaderDbHelper(applicationContext)
         dbHelper!!.getAllTasks()?.let { taskList.addAll(it) }
@@ -129,6 +132,10 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        updateList()
+        initButtons()
+    }
 }
 
