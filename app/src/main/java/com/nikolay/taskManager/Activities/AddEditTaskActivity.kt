@@ -79,7 +79,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
+        val taskId: Long = intent.getLongExtra("taskId", taskId)
         return if (isEdit(taskId)) {
             menuInflater.inflate(R.menu.menu, menu)
             true
@@ -87,7 +87,7 @@ class AddEditTaskActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val taskId: Long = intent.getLongExtra("taskId", taskId.toLong())
+        val taskId: Long = intent.getLongExtra("taskId", taskId)
         dbHelper = FeedReaderDbHelper(applicationContext)
         if (item != null && isEdit(taskId)) {
             when (item.itemId) {

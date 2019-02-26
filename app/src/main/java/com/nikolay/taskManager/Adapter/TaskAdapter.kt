@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.R
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
+import kotlinx.android.synthetic.main.item_task.*
 import kotlinx.android.synthetic.main.item_task.view.*
 
 
@@ -29,15 +30,17 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
+
+        private var taskListDelete = ArrayList<Task>()
         fun bind(task: Task, listener: (Task) -> Unit) = with(itemView) {
             tvTitle.text = task.title
             tvTime.text = task.date + task.time
             tvPriority.text = task.Priority
             checkbox.isChecked = task.done
-
+            val dbHelper = FeedReaderDbHelper(context)
             setOnClickListener { listener(task) }
             checkbox.setOnClickListener {
-                val dbHelper = FeedReaderDbHelper(context)
+
                 val editedTask =
                     Task(
                         task.id,
@@ -52,7 +55,18 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
                 Log.d("adapterDone", editedTask.toString() + checkbox.isChecked)
             }
 
+            if (checkbox_delete.visibility == View.VISIBLE) {
+                Log.d("INVISIBLE", checkbox_delete.isChecked.toString())
+                checkbox_delete.setOnClickListener {
+
+
+                    if (checkbox_delete.isChecked)
+                        taskListDelete.add(dbHelper.getTask(task.id!!))
+
+                }
+            }
         }
     }
+
 
 }
