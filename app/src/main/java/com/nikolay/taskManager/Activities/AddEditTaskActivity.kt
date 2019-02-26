@@ -3,7 +3,6 @@ package com.nikolay.taskManager.Activities
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
@@ -13,7 +12,6 @@ import android.support.annotation.RequiresApi
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
-import android.util.AttributeSet
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -49,7 +47,6 @@ class AddEditTaskActivity : AppCompatActivity() {
         initButtons()
 
     }
-
 
 
     override fun onStart() {

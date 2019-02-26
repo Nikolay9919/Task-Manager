@@ -7,8 +7,6 @@ import android.support.annotation.RequiresApi
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.nikolay.taskManager.Adapter.TaskAdapter
 import com.nikolay.taskManager.Models.Task
@@ -30,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         updateList() // get or update list of tasks
     }
-
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
@@ -84,7 +79,6 @@ class MainActivity : AppCompatActivity() {
         else
             tvNotTask.visibility = View.INVISIBLE
     }
-
 
     override fun onDestroy() {
         dbHelper!!.close()
