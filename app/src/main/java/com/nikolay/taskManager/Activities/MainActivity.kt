@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             val bundle = Bundle()
             val transaction = manager.beginTransaction()
             val fragment = AddTaskFragment()
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
             transaction.replace(R.id.fragment_holder, fragment)
             bundle.putLong("taskId", -1L)
             fragment.arguments = bundle
@@ -65,9 +66,12 @@ class MainActivity : AppCompatActivity() {
         fab_multiple_add.setOnClickListener {
             val transaction = manager.beginTransaction()
             val fragment = AddTasksFragment()
+            transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
             transaction.replace(R.id.fragment_holder, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
+            fab_add.visibility = View.GONE
+            fab_multiple_add.visibility = View.GONE
 
         }
     }

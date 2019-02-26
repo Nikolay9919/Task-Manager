@@ -21,7 +21,6 @@ import com.nikolay.taskManager.Models.Task
 import com.nikolay.taskManager.R
 import com.nikolay.taskManager.SQLite.FeedReaderDbHelper
 import kotlinx.android.synthetic.main.activity_add_task.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,13 +43,12 @@ class AddTaskFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        dbHelper = FeedReaderDbHelper(activity!!.applicationContext)
-
         return inflater.inflate(R.layout.activity_add_task, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dbHelper = FeedReaderDbHelper(activity!!.applicationContext)
         initSpinner()
         initButtons(taskId)
     }
