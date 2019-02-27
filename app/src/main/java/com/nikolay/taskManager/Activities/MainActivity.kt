@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private val taskList = ArrayList<Task>()
     private var dbHelper: FeedReaderDbHelper? = null
-    val manager = supportFragmentManager
+    private val manager = supportFragmentManager
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         updateList() // get or update list of tasks
-        startService() // start Notification Service
+
     }
 
 
@@ -120,19 +120,23 @@ class MainActivity : AppCompatActivity() {
         val scheduler: JobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         scheduler.schedule(jobInfo)
 
+
     }
 
     override fun onDestroy() {
+        startService() // start Notification Service
         dbHelper!!.close()
         super.onDestroy()
     }
 
     override fun onStop() {
+        startService() // start Notification Service
         dbHelper!!.close()
         super.onStop()
     }
 
     override fun onPause() {
+        startService() // start Notification Service
         dbHelper!!.close()
         super.onPause()
     }
