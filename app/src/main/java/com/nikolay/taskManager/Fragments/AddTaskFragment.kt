@@ -191,7 +191,7 @@ class AddTaskFragment : Fragment() {
     } // Check whether to be edited
 
     private fun closeFragment() {
-        activity!!.onBackPressed()
+        activity!!.fragmentManager.popBackStack()
 
     }
 }

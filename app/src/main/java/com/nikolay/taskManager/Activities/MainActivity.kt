@@ -47,14 +47,36 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroy() {
+        startService() // start Notification Service
+        dbHelper!!.close()
+        super.onDestroy()
+    }
 
+    override fun onStop() {
+        startService() // start Notification Service
+        dbHelper!!.close()
+        super.onStop()
+    }
+
+    override fun onPause() {
+        startService() // start Notification Service
+        dbHelper!!.close()
+        super.onPause()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        updateList()
+        initButtons()
+    }
     private fun initButtons() {
         fab_add.setOnClickListener {
             val bundle = Bundle()
             val transaction = manager.beginTransaction()
             val fragment = AddTaskFragment()
             transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-            transaction.replace(R.id.fragment_holder, fragment)
+            transaction.add(R.id.fragment_holder, fragment)
             bundle.putLong("taskId", -1L)
             fragment.arguments = bundle
             transaction.addToBackStack(null)
@@ -67,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             val transaction = manager.beginTransaction()
             val fragment = AddTasksFragment()
             transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            transaction.replace(R.id.fragment_holder, fragment)
+            transaction.add(R.id.fragment_holder, fragment)
             transaction.addToBackStack(null)
             transaction.commit()
             fab_add.visibility = View.GONE
@@ -123,28 +145,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        startService() // start Notification Service
-        dbHelper!!.close()
-        super.onDestroy()
-    }
 
-    override fun onStop() {
-        startService() // start Notification Service
-        dbHelper!!.close()
-        super.onStop()
-    }
-
-    override fun onPause() {
-        startService() // start Notification Service
-        dbHelper!!.close()
-        super.onPause()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        updateList()
-        initButtons()
-    }
 }
 

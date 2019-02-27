@@ -127,16 +127,6 @@ class FeedReaderDbHelper(context: Context) :
         db.close()
     }
 
-    fun deleteTasks(taskList: ArrayList<Task>) {
-
-        val db = writableDatabase
-        for (i in taskList) {
-            val selection = "${BaseColumns._ID} LIKE " + i.id
-            db.delete(FeedReaderContract.FeedEntry.TABLE_TASK, selection, null)
-        }
-        db.close()
-    }
-
     private fun changeToBool(int: Int): Boolean {
         return int == 1
     }
