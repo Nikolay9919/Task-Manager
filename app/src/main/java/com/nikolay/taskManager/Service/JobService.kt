@@ -12,7 +12,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.support.annotation.RequiresApi
-import android.util.Log
 import android.widget.RemoteViews
 import com.nikolay.taskManager.Activities.MainActivity
 import com.nikolay.taskManager.Models.Task
@@ -28,7 +27,6 @@ class JobService : JobService() {
     var dbHelper: FeedReaderDbHelper? = null
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartJob(params: JobParameters?): Boolean {
-        Log.d("Jobstarted", "Started")
         checkDateTime(getList(), params)
         return true
     }
@@ -46,22 +44,13 @@ class JobService : JobService() {
         val simpleOutputTimeFormat = SimpleDateFormat("HH:mm", Locale.US)
         val timeNowInput = simpleInputTimeFormat.parse(LocalTime.now().toString())
         val timeNow = simpleOutputTimeFormat.format(timeNowInput)
-        Log.d("service", "service")
-
-        Log.d("service1", "service1")
         for (i in taskList) {
-            Log.d("service2", "service2")
             val inputTime = simpleInputTimeFormat.parse(i.time)
             val time = simpleOutputTimeFormat.format(inputTime)
             if (i.date.contains(LocalDate.now().toString())) {
-
                 if (time.contains(timeNow)) {
                     startNotify(i.title, time, i.Priority)
-                    Log.d("service3", i.toString())
-
-
                 }
-                Log.d("service1", taskList.toString())
             }
         }
 

@@ -211,8 +211,7 @@ class AddTasksFragment : Fragment() {
 
         }
     }
-
-
+    
     private fun emptyValidation(): Boolean {
         if (TextUtils.isEmpty(editTextTitle_1.text) || TextUtils.isEmpty(dateTask1) || TextUtils.isEmpty(timeTask1) ||
             TextUtils.isEmpty(editTextTitle_2.text) || TextUtils.isEmpty(dateTask2) || TextUtils.isEmpty(timeTask2) ||

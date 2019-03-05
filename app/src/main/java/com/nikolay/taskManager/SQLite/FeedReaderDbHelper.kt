@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
-import android.util.Log
 import com.nikolay.taskManager.Models.Task
 
 class FeedReaderDbHelper(context: Context) :
@@ -44,7 +43,6 @@ class FeedReaderDbHelper(context: Context) :
         val taskList = ArrayList<Task>()
         if (cursor.moveToFirst())
             do {
-                Log.d("time", cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TIME)))
                 val task = Task(
                     cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)),
                     cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE)),
@@ -62,7 +60,6 @@ class FeedReaderDbHelper(context: Context) :
                 )
                 taskList.add(task)
             } while (cursor.moveToNext())
-        Log.d("AllTasksCursor", taskList.toString())
         db.close()
         return taskList
     }
@@ -76,7 +73,6 @@ class FeedReaderDbHelper(context: Context) :
         var task = Task()
         if (cursor != null && cursor.moveToFirst()) {
 
-            Log.d("cursor", cursor.toString())
             task = Task(
                 cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)),
                 cursor.getString(cursor.getColumnIndex(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE)),
@@ -95,12 +91,10 @@ class FeedReaderDbHelper(context: Context) :
             )
         }
 
-        Log.d("date time", task.toString())
         return task
     }
 
     fun updateTask(task: Task) {
-        Log.d("updateTask", task.toString())
 
         val contentValues = ContentValues().apply {
             put(FeedReaderContract.FeedEntry.COLUMN_TASK_TITLE, task.title)
@@ -110,7 +104,6 @@ class FeedReaderDbHelper(context: Context) :
         }
 
         val db = writableDatabase
-        Log.d("cv", contentValues.toString())
         db.update(
             FeedReaderContract.FeedEntry.TABLE_TASK, contentValues,
             BaseColumns._ID + " = " + task.id, null

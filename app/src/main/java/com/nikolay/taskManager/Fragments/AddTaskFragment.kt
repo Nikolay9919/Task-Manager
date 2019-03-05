@@ -38,7 +38,6 @@ class AddTaskFragment : Fragment() {
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         taskId = arguments!!.getLong("taskId", taskId)
-        Log.d("taskIdFragment", arguments!!.getLong("taskId", taskId).toString())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -73,7 +72,6 @@ class AddTaskFragment : Fragment() {
         tv_time.text = time
 
     }
-
 
     private fun initSpinner() {
         val adapter =
@@ -144,19 +142,15 @@ class AddTaskFragment : Fragment() {
                         .setAction("Action", null).show()
                 } else {
                     val task = Task(null, title, false, priority, priorityGrade, dateTask, timeTask)
-                    Log.d("taskIdAdd", task.toString())
                     dbHelper!!.addTask(task)
                     closeFragment()
                 }
             } else {
                 val task = Task(taskId, title, false, priority, priorityGrade, dateTask, timeTask)
-                Log.d("taskIdUpdate", task.toString())
                 dbHelper!!.updateTask(task)
                 closeFragment()
             }
         }
-
-        Log.d("taskidininit", taskId.toString())
         if (taskId == -1L)
             fab_delete.visibility = View.INVISIBLE
         else {
@@ -191,7 +185,7 @@ class AddTaskFragment : Fragment() {
     } // Check whether to be edited
 
     private fun closeFragment() {
-        activity!!.fragmentManager.popBackStack()
+        activity!!.onBackPressed()
 
     }
 }

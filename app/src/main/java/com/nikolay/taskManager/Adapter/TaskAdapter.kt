@@ -2,7 +2,6 @@ package com.nikolay.taskManager.Adapter
 
 import android.annotation.SuppressLint
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +59,6 @@ class TaskAdapter(private val taskList: List<Task>, private val listener: (Task)
                         task.time
                     )
                 dbHelper.updateTask(editedTask)
-                Log.d("adapterDone", editedTask.toString() + checkbox.isChecked)
             }
 
         }

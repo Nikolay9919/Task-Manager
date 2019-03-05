@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         updateList()
         initButtons()
     }
+
     private fun initButtons() {
         fab_add.setOnClickListener {
             val bundle = Bundle()
